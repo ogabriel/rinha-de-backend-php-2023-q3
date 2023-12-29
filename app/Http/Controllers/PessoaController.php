@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pessoa;
 use Illuminate\Routing\Controller as BaseController;
 
 class PessoaController extends BaseController
@@ -9,7 +10,19 @@ class PessoaController extends BaseController
     public function store(Request $request)
     {
         $pessoa = new Pessoa();
+        $pessoa->apelido = $request->apelido;
         $pessoa->nome = $request->nome;
+        $pessoa->nascimento = $request->nascimento;
+        $pessoa->stack = $request->stack;
+
+        if ($request->stack == [] || $request->stack == null) {
+            $pessoa->busca = "$request->apelido $request->nome";
+        } else {
+            $busca = [$request->apelido, $request->nome];
+            $busca = array_merge($busca, $request->stack);
+            $pessoa->busca = implode(' ', $busca);
+        }
+
         $pessoa->save();
 
         return response()->json($pessoa);
