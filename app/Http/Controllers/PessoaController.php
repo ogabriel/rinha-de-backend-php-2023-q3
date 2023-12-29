@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-class PessoaController extends Controller
+use Illuminate\Routing\Controller as BaseController;
+
+class PessoaController extends BaseController
 {
     public function store(Request $request)
     {
