@@ -20,7 +20,13 @@ class PessoaController extends Controller
         return response()->json($pessoa);
     }
 
-    // search by field 'busca' and return nothing if the field is empty
+    public function show($id)
+    {
+        $pessoa = Pessoa::findOrFail($id);
+
+        return response()->json($pessoa);
+    }
+
     public function search(Request $request)
     {
         if ($request->busca == '') {
@@ -32,7 +38,6 @@ class PessoaController extends Controller
         return response()->json($pessoas);
     }
 
-    // count all pessoas on database
     public function count()
     {
         $count = Pessoa::count();
