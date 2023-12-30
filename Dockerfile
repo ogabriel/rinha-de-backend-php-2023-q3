@@ -4,11 +4,11 @@ WORKDIR /app
 
 COPY composer.json composer.lock /app/
 
-RUN composer install --no-autoloader --no-scripts --no-dev
+RUN composer install --no-autoloader --no-dev --no-scripts --no-interaction
 
 COPY . /app
 
-RUN composer dump-autoload --optimize --no-dev --classmap-authoritative
+RUN composer install --optimize-autoloader --apcu-autoloader --classmap-authoritative --no-dev --no-interaction
 
 RUN php artisan config:cache && php artisan event:cache && php artisan route:cache
 
