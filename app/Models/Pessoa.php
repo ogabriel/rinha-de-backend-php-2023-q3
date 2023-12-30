@@ -12,6 +12,6 @@ class Pessoa extends Model
     public $timestamps = false;
 
     protected $casts = [
-        'education' => 'array',
+        'stack' => 'array',
     ];
 }
