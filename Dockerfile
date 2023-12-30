@@ -4,11 +4,13 @@ WORKDIR /app
 
 COPY composer.json composer.lock /app/
 
-RUN composer install --no-autoloader --no-scripts
+RUN composer install --no-autoloader --no-scripts --no-dev
 
 COPY . /app
 
-RUN composer dump-autoload
+RUN composer dump-autoload --optimize --no-dev --classmap-authoritative
+
+RUN php artisan config:cache && php artisan event:cache && php artisan route:cache
 
 FROM php:alpine AS release
 
