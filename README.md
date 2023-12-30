@@ -13,6 +13,8 @@ Implementar a rinha em PHP usando o Laravel, e sem fazer nenuma adição de cach
     - piorou
     - eu também tenho uma teoria do motivo da piora, apenas com o "Built-in server do PHP", que roda com apenas 1 de concorrência, o container já topa os 0.5% de CPU, então aumentar a concorrência não faz sentido se não tiver recursos
 3. remover nginx e php-fpm
+4. adicionar denovo
+    - um pouco mais de ajustes no nginx ajudam a dar mais uns 300 inscrições no banco
 
 ## Conclusões
 
@@ -38,33 +40,32 @@ Além de que por algumas limitações do ORM do Laravel, algumas coisas bem pesa
 ##### Resultado do gatling console
 
 ```
-Simulation RinhaBackendSimulation completed in 239 seconds
+Simulation RinhaBackendSimulation completed in 231 seconds
 Parsing log file(s)...
 Parsing log file(s) done
 Generating reports...
 
 ================================================================================
 ---- Global Information --------------------------------------------------------
-> request count                                      70488 (OK=3323   KO=67165 )
-> min response time                                      0 (OK=48     KO=0     )
-> max response time                                  60001 (OK=56651  KO=60001 )
-> mean response time                                   693 (OK=14508  KO=9     )
-> std deviation                                       3573 (OK=7723   KO=732   )
-> response time 50th percentile                          0 (OK=17180  KO=0     )
-> response time 75th percentile                          1 (OK=17935  KO=1     )
-> response time 95th percentile                          1 (OK=18955  KO=1     )
-> response time 99th percentile                      18013 (OK=49826  KO=1     )
-> mean requests/sec                                  293.7 (OK=13.846 KO=279.854)
+> request count                                      70740 (OK=3651   KO=67089 )
+> min response time                                      0 (OK=45     KO=0     )
+> max response time                                  17018 (OK=17018  KO=7     )
+> mean response time                                   688 (OK=13321  KO=0     )
+> std deviation                                       3160 (OK=5019   KO=0     )
+> response time 50th percentile                          0 (OK=15193  KO=0     )
+> response time 75th percentile                          1 (OK=16048  KO=1     )
+> response time 95th percentile                         82 (OK=16625  KO=1     )
+> response time 99th percentile                      16164 (OK=16919  KO=1     )
+> mean requests/sec                                306.234 (OK=15.805 KO=290.429)
 ---- Response Time Distribution ------------------------------------------------
-> t < 800 ms                                           353 (  1%)
-> 800 ms <= t < 1200 ms                                 16 (  0%)
-> t >= 1200 ms                                        2954 (  4%)
-> failed                                             67165 ( 95%)
+> t < 800 ms                                           319 (  0%)
+> 800 ms <= t < 1200 ms                                 15 (  0%)
+> t >= 1200 ms                                        3317 (  5%)
+> failed                                             67089 ( 95%)
 ---- Errors --------------------------------------------------------------------
-> j.i.IOException: Premature close                                67155 (99.99%)
-> Request timeout to localhost/127.0.0.1:9999 after 60000 ms         10 ( 0.01%)
+> j.i.IOException: Premature close                                67089 (100.0%)
 ================================================================================
-A contagem de pessoas é: 2078
+A contagem de pessoas é: 2325
 ```
 
 ##### Recusos do docker durante a parte mais pesada do teste
