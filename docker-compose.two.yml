@@ -5,10 +5,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: release
+      target: release1
     environment: &env_app1
       APP_ENV: production
       APP_DEBUG: false
+      LOG_CHANNEL: null
       DB_CONNECTION: pgsql
       DB_HOST: 127.0.0.1
       DB_PORT: 5432
@@ -28,6 +29,10 @@ services:
 
   app2:
     <<: *app1
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: release2
     depends_on:
     - app1
     environment:
