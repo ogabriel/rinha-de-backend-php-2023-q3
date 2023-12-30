@@ -55,11 +55,13 @@ class PessoaController extends BaseController
 
     public function search(Request $request)
     {
-        if ($request->busca == '') {
-            return response()->json([]);
+        $term = $request->query('t');
+
+        if ($term == '') {
+            return response()->json([], 400);
         }
 
-        $pessoas = Pessoa::where('nome', 'like', '%'.$request->busca.'%')->get();
+        $pessoas = Pessoa::where('nome', 'like', '%'.$term.'%')->get();
 
         return response()->json($pessoas);
     }
