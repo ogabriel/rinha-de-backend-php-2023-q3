@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        DB::statement('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
+
         Schema::create('pessoas', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->uuid('id')->primary()->default(DB::raw('uuid_generate_v4()'));
             $table->string('apelido', 32);
             $table->string('nome', 100);
             $table->string('nascimento', 10);
@@ -27,6 +29,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        DB::statement('DROP EXTENSION IF EXISTS "uuid-ossp";');
         Schema::dropIfExists('pessoas');
     }
 };
