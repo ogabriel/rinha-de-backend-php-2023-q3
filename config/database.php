@@ -76,6 +76,12 @@ return [
             'prefix_indexes' => true,
             'search_path' => 'public',
             'sslmode' => 'prefer',
+            'options' => [
+                'pool' => [
+                    'min' => env('DB_POOL', 5),
+                    'max' => env('DB_POOL', 10),
+                ],
+            ],
         ],
 
         'sqlsrv' => [
