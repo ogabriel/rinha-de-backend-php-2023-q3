@@ -44,7 +44,11 @@ class PessoaController extends BaseController
 
     public function show($id)
     {
-        $pessoa = Pessoa::findOrFail($id);
+        try {
+            $pessoa = Pessoa::findOrFail($id);
+        } catch (\Throwable $th) {
+            return response()->make('', 404);
+        }
 
         return response()->json($pessoa);
     }
