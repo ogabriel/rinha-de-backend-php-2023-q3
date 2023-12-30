@@ -15,8 +15,8 @@ class Pessoa extends Model
     protected function stack(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => json_decode(str_replace(['{', '}'], ['[', ']'], $value)),
-            set: fn (array $value) => str_replace(['[', ']'], ['{', '}'], json_encode($value)),
+            get: fn (mixed $value) => (is_string($value)) ? json_decode(str_replace(['{', '}'], ['[', ']'], $value)) : null,
+            set: fn (mixed $value) => (is_array($value)) ? str_replace(['[', ']'], ['{', '}'], json_encode($value)) : null,
         );
     }
 
