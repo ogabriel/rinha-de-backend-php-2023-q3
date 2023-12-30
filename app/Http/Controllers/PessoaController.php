@@ -23,9 +23,13 @@ class PessoaController extends BaseController
             $pessoa->busca = "$request->apelido $request->nome $stack";
         }
 
-        $pessoa->save();
+        try {
+            $pessoa->save();
+        } catch (\Throwable $th) {
+            return response()->make('', 422);
+        }
 
-        return response()->json($pessoa);
+        return response()->make('', 201)->header('Location', "/pessoas/$pessoa->id");
     }
 
     public function show($id)
