@@ -1,66 +1,72 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Rinha de backend
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Implementação em PHP da [rinha de backend 2023 Q3](https://github.com/zanfranceschi/rinha-de-backend-2023-q3).
 
-## About Laravel
+## Objetivo
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Implementar a rinha em PHP usando o Laravel, e sem fazer nenuma adição de cache e batch insert.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Implementações testadas
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. otimizar o autoloader
+2. adicionar nginx e PHP-FPM em cada um dos apps
+    - piorou
+    - eu também tenho uma teoria do motivo da piora, apenas com o "Built-in server do PHP", que roda com apenas 1 de concorrência, o container já topa os 0.5% de CPU, então aumentar a concorrência não faz sentido se não tiver recursos
+3. remover nginx e php-fpm
 
-## Learning Laravel
+## Conclusões
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Não sei se estou comentendo algum erro muito grande em PHP (nunca programei antes), mas a performance é MUITO pior que o Ruby, e nem se compara com Elixir ou Golang.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Além de que por algumas limitações do ORM do Laravel, algumas coisas bem pesadas tiveram de ser feitas para atingir todos os objetivos da rinha.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Resultados
 
-## Laravel Sponsors
+### Laptop
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+|CPU|RAM|
+|---|---|
+|Ryzen 4750U|16GB|
 
-### Premium Partners
+#### Duas instâncias (com nginx)
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+##### Resultado do gatling navegador
 
-## Contributing
+![resultado gatling navegador part 1](./images/laptop/two/gatling-browser-1.png)
+![resultado gatling navegador part 2](./images/laptop/two/gatling-browser-2.png)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+##### Resultado do gatling console
 
-## Code of Conduct
+```
+Simulation RinhaBackendSimulation completed in 239 seconds
+Parsing log file(s)...
+Parsing log file(s) done
+Generating reports...
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+================================================================================
+---- Global Information --------------------------------------------------------
+> request count                                      70488 (OK=3323   KO=67165 )
+> min response time                                      0 (OK=48     KO=0     )
+> max response time                                  60001 (OK=56651  KO=60001 )
+> mean response time                                   693 (OK=14508  KO=9     )
+> std deviation                                       3573 (OK=7723   KO=732   )
+> response time 50th percentile                          0 (OK=17180  KO=0     )
+> response time 75th percentile                          1 (OK=17935  KO=1     )
+> response time 95th percentile                          1 (OK=18955  KO=1     )
+> response time 99th percentile                      18013 (OK=49826  KO=1     )
+> mean requests/sec                                  293.7 (OK=13.846 KO=279.854)
+---- Response Time Distribution ------------------------------------------------
+> t < 800 ms                                           353 (  1%)
+> 800 ms <= t < 1200 ms                                 16 (  0%)
+> t >= 1200 ms                                        2954 (  4%)
+> failed                                             67165 ( 95%)
+---- Errors --------------------------------------------------------------------
+> j.i.IOException: Premature close                                67155 (99.99%)
+> Request timeout to localhost/127.0.0.1:9999 after 60000 ms         10 ( 0.01%)
+================================================================================
+A contagem de pessoas é: 2078
+```
 
-## Security Vulnerabilities
+##### Recusos do docker durante a parte mais pesada do teste
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+![Recusos do docker durante a parte mais pesada do teste](./images/laptop/two/docker-stats.png)
