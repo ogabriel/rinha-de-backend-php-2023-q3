@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('busca');
         });
 
-        DB::statement('ALTER TABLE pessoas ADD COLUMN stack varying(32)[]');
+        DB::statement('ALTER TABLE pessoas ADD COLUMN stack VARCHAR(32)[]');
     }
 
     /**
