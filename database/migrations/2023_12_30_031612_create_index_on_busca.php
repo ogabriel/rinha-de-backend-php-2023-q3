@@ -9,6 +9,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        DB::statement('CREATE EXTENSION IF NOT EXISTS pg_trgm;');
         DB::statement("CREATE INDEX pessoas_busca_gist_trgm_ops_index ON pessoas USING gist (busca gist_trgm_ops (siglen = '1024'));");
     }
 
@@ -18,5 +19,6 @@ return new class extends Migration
     public function down(): void
     {
         DB::statement('DROP INDEX IF EXISTS pessoas_busca_gist_trgm_ops_index;');
+        DB::statement('DROP EXTENSION IF EXISTS pg_trgm;');
     }
 };
