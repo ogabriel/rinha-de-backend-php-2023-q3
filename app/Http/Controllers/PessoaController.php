@@ -19,9 +19,8 @@ class PessoaController extends BaseController
         if ($request->stack == [] || $request->stack == null) {
             $pessoa->busca = "$request->apelido $request->nome";
         } else {
-            $busca = [$request->apelido, $request->nome];
-            $busca = array_merge($busca, $request->stack);
-            $pessoa->busca = implode(' ', $busca);
+            $stack = implode(' ', $request->stack);
+            $pessoa->busca = "$request->apelido $request->nome $stack";
         }
 
         $pessoa->save();
