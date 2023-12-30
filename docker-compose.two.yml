@@ -7,12 +7,14 @@ services:
       dockerfile: Dockerfile
       target: release
     environment: &env_app1
-      DB_HOST: localhost
-      DB_USER: postgres
-      DB_PASS: postgres
+      APP_ENV: production
+      APP_DEBUG: false
+      DB_CONNECTION: pgsql
+      DB_HOST: 127.0.0.1
       DB_PORT: 5432
-      DB_NAME: rinha
-      DB_POOL: 10
+      DB_DATABASE: rinha
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
       PORT: 9997
     network_mode: host
     depends_on:
