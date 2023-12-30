@@ -27,6 +27,22 @@ class PessoaController extends BaseController
             return response()->make('', 422);
         }
 
+        if ($request->stack != null) {
+            if (! is_array($request->stack)) {
+                return response('', 400);
+            }
+
+            foreach ($request->stack as $stack) {
+                if (! is_string($stack)) {
+                    return response('', 400);
+                }
+
+                if (strlen($stack) > 32) {
+                    return response('', 400);
+                }
+            }
+        }
+
         $pessoa = new Pessoa();
         $pessoa->apelido = $request->apelido;
         $pessoa->nome = $request->nome;
