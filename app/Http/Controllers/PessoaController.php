@@ -10,8 +10,6 @@ class PessoaController extends BaseController
 {
     public function store(Request $request)
     {
-        $pessoa = new Pessoa();
-
         if ($request->apelido == '' || $request->nome == '' || $request->nascimento == '') {
             return response()->make('', 422);
         }
@@ -21,6 +19,7 @@ class PessoaController extends BaseController
             return response()->make('', 422);
         }
 
+        $pessoa = new Pessoa();
         $pessoa->apelido = $request->apelido;
         $pessoa->nome = $request->nome;
         $pessoa->nascimento = $request->nascimento;
