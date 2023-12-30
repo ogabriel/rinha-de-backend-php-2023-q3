@@ -11,7 +11,15 @@ class PessoaController extends BaseController
     public function store(Request $request)
     {
         if ($request->apelido == '' || $request->nome == '' || $request->nascimento == '') {
-            return response()->make('', 422);
+            return response('', 422);
+        }
+
+        if (! is_string($request->apelido) || ! is_string($request->nome) || ! is_string($request->nascimento)) {
+            return response('', 400);
+        }
+
+        if (strlen($request->apelido) > 32 || strlen($request->nome) > 100 || strlen($request->nascimento) != 10) {
+            return response('', 400);
         }
 
         $date = date_parse_from_format('Y-n-j', $request->nascimento);
