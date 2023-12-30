@@ -15,7 +15,7 @@ return new class extends Migration
 
         Schema::create('pessoas', function (Blueprint $table) {
             $table->uuid('id')->primary()->default(DB::raw('uuid_generate_v4()'));
-            $table->string('apelido', 32);
+            $table->string('apelido', 32)->unique();
             $table->string('nome', 100);
             $table->string('nascimento', 10);
             $table->text('busca');
