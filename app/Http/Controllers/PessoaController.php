@@ -24,7 +24,7 @@ class PessoaController extends BaseController
 
         $date = date_parse_from_format('Y-n-j', $request->nascimento);
         if ($date['error_count'] > 0 || $date['warning_count'] > 0) {
-            return response()->make('', 422);
+            return response('', 422);
         }
 
         if ($request->stack != null) {
