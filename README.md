@@ -37,6 +37,56 @@ Além de que por algumas limitações do ORM do Laravel, algumas coisas bem pesa
 
 ## Resultados
 
+### Desktop
+
+|CPU|RAM|
+|---|---|
+|Ryzen 5900X|32GB|
+
+#### Duas instâncias (com nginx)
+
+##### Resultado do gatling navegador
+
+![resultado gatling navegador part 1](./images/desktop/two/gatling-browser-1.png)
+![resultado gatling navegador part 2](./images/desktop/two/gatling-browser-2.png)
+
+##### Resultado do gatling console
+
+```
+Simulation RinhaBackendSimulation completed in 228 seconds
+Parsing log file(s)...
+Parsing log file(s) done
+Generating reports...
+
+================================================================================
+---- Global Information --------------------------------------------------------
+> request count                                     102122 (OK=81713  KO=20409 )
+> min response time                                      0 (OK=1      KO=0     )
+> max response time                                  20071 (OK=20071  KO=76    )
+> mean response time                                  6838 (OK=8539   KO=25    )
+> std deviation                                       7624 (OK=7626   KO=20    )
+> response time 50th percentile                       2401 (OK=7221   KO=24    )
+> response time 75th percentile                      16438 (OK=16865  KO=41    )
+> response time 95th percentile                      18793 (OK=18996  KO=59    )
+> response time 99th percentile                      19824 (OK=19882  KO=65    )
+> mean requests/sec                                445.948 (OK=356.825 KO=89.122)
+---- Response Time Distribution ------------------------------------------------
+> t < 800 ms                                         25296 ( 25%)
+> 800 ms <= t < 1200 ms                               1586 (  2%)
+> t >= 1200 ms                                       54831 ( 54%)
+> failed                                             20409 ( 20%)
+---- Errors --------------------------------------------------------------------
+> status.find.in(201,422,400), but actually found 502             15146 (74.21%)
+> status.find.in([200, 209], 304), found 502                       4225 (20.70%)
+> status.find.is(400), but actually found 502                      1038 ( 5.09%)
+================================================================================
+A contagem de pessoas é: 33707
+```
+
+##### Recusos do docker durante a parte mais pesada do teste
+
+![Recusos do docker durante a parte mais pesada do teste](./images/laptop/two/docker-stats.png)
+
 ### Laptop
 
 |CPU|RAM|
