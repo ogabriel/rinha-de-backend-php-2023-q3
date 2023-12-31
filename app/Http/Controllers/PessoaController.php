@@ -88,7 +88,7 @@ class PessoaController extends BaseController
             return response('', 400);
         }
 
-        $pessoas = Pessoa::where('nome', 'like', '%'.$term.'%')->limit(50)->get();
+        $pessoas = Pessoa::where('busca', 'like', '%'.$term.'%')->limit(50)->get();
 
         return response()->json($pessoas);
     }
