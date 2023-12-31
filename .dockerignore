@@ -6,3 +6,4 @@ Dockerfile
 postgresql.conf
 nginx.conf
 .env*
+vendor/
