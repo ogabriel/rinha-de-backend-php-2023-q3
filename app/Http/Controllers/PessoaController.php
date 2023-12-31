@@ -67,6 +67,10 @@ class PessoaController extends BaseController
 
     public function show($id)
     {
+        if (! is_string($id) || strlen($id) != 36) {
+            return response('', 404);
+        }
+
         try {
             $pessoa = Pessoa::findOrFail($id);
         } catch (\Throwable $th) {
