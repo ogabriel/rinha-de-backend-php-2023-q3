@@ -6,20 +6,13 @@ RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && docker-php-ex
 
 WORKDIR /app
 
-COPY composer.json composer.lock /app/
-
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-RUN composer install --no-autoloader --prefer-dist --no-dev --no-scripts --no-interaction
 
 COPY . /app
 
-RUN composer install --optimize-autoloader --apcu-autoloader --classmap-authoritative --no-dev --no-interaction
+RUN composer install --optimize-autoloader --apcu-autoloader --classmap-authoritative --prefer-dist --no-dev --no-interaction
 
-RUN php artisan cache:clear && \
-    php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan optimize
+RUN php artisan optimize:clear
 
 COPY php-fpm.conf /usr/local/etc/php-fpm.conf
 
