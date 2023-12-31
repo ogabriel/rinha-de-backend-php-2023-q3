@@ -91,7 +91,7 @@ class PessoaController extends BaseController
 
         $term = strtolower($term);
 
-        $pessoas = Pessoa::where('busca', 'like', '%'.$term.'%')->limit(50)->get();
+        $pessoas = Pessoa::where('busca', 'ilike', '%'.$term.'%')->limit(50)->get();
 
         return response()->json($pessoas);
     }
