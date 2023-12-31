@@ -50,10 +50,11 @@ class PessoaController extends BaseController
         $pessoa->stack = $request->stack;
 
         if ($request->stack == [] || $request->stack == null) {
-            $pessoa->busca = "$request->apelido $request->nome";
+            $pessoa->busca = strtolower($request->apelido).' '.strtolower($request->nome);
         } else {
-            $stack = implode(' ', $request->stack);
-            $pessoa->busca = "$request->apelido $request->nome $stack";
+            $busca = array_map('strtolower', $request->stack);
+            $busca = array_merge($busca, [strtolower($request->apelido), strtolower($request->nome)]);
+            $pessoa->busca = implode(' ', $busca);
         }
 
         try {
@@ -87,6 +88,8 @@ class PessoaController extends BaseController
         if ($term == '') {
             return response('', 400);
         }
+
+        $term = strtolower($term);
 
         $pessoas = Pessoa::where('busca', 'like', '%'.$term.'%')->limit(50)->get();
 
