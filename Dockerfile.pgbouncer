@@ -1,0 +1,21 @@
+# Use the official PostgreSQL image based on Alpine Linux
+FROM postgres:alpine
+
+# Install PgBouncer
+RUN apk --no-cache add pgbouncer
+
+# Copy the PgBouncer configuration files
+COPY pgbouncer.ini /etc/pgbouncer/
+COPY userlist.txt /etc/pgbouncer/
+
+# Change ownership of configuration files to the non-root user
+RUN chown -R postgres:postgres /etc/pgbouncer
+
+# Start PgBouncer as the non-root user
+USER postgres
+
+# Expose PgBouncer port
+EXPOSE 6432
+
+# Start PgBouncer
+CMD ["pgbouncer", "/etc/pgbouncer/pgbouncer.ini"]
