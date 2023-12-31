@@ -9,12 +9,25 @@ Implementar a rinha em PHP usando o Laravel, e sem fazer nenuma adição de cach
 ## Implementações testadas
 
 1. otimizar o autoloader
+    - chegando a quase 3K registros
 2. adicionar nginx e PHP-FPM em cada um dos apps
-    - piorou
+    - piorou, foi pra 2K
     - eu também tenho uma teoria do motivo da piora, apenas com o "Built-in server do PHP", que roda com apenas 1 de concorrência, o container já topa os 0.5% de CPU, então aumentar a concorrência não faz sentido se não tiver recursos
 3. remover nginx e php-fpm
-4. adicionar denovo
+    - voltou a quase 3K registros
+4. adicionar denovo o FPM e nginx
+    - mexendo mais um pouco, chegou a um pouco mais de 3K registros
     - um pouco mais de ajustes no nginx ajudam a dar mais uns 300 inscrições no banco
+5. adicionar opcache e usar uma máquina mais potente
+    - chegou a 8K registros
+6. adicionar pgbouncer
+    - chegou a mais de 20K registros
+    - laravel não tem um connection pool, e no postgres isso é muito ruim pois toda conexão é uma thread, e é muito pesado criar e fechar uma conexão toda hora
+    - então o pgbouncer cuida disso e fica mais leve
+7. usar JIT no opcache
+    - melhorou mais um pouco
+8. otimizar recursos para a aplicação PHP
+    - PHP usa recursos demais, quanto mais recursos liberados para ele, melhor performance, o bottleneck tava no web server
 
 ## Conclusões
 
