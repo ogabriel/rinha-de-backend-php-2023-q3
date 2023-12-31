@@ -2,7 +2,7 @@ FROM php:fpm-alpine AS release
 
 RUN apk add --update --no-cache make postgresql-client postgresql-dev nginx supervisor
 
-RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && docker-php-ext-install pgsql pdo_pgsql
+RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && docker-php-ext-install pgsql pdo_pgsql opcache
 
 WORKDIR /app
 
@@ -15,6 +15,8 @@ RUN composer install --optimize-autoloader --apcu-autoloader --classmap-authorit
 RUN php artisan optimize:clear
 
 COPY php-fpm.conf /usr/local/etc/php-fpm.conf
+
+COPY opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 RUN mkdir -p /var/run/php
 
