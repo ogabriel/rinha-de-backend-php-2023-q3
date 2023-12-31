@@ -16,7 +16,6 @@ services:
       DB_DATABASE: rinha
       DB_USERNAME: postgres
       DB_PASSWORD: postgres
-      DB_POOL: 10
       PORT: 9997
     network_mode: host
     depends_on:
