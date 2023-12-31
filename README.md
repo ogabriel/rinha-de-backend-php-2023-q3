@@ -103,32 +103,34 @@ A contagem de pessoas é: 33707
 ##### Resultado do gatling console
 
 ```
-Simulation RinhaBackendSimulation completed in 231 seconds
+Simulation RinhaBackendSimulation completed in 253 seconds
 Parsing log file(s)...
 Parsing log file(s) done
 Generating reports...
 
 ================================================================================
 ---- Global Information --------------------------------------------------------
-> request count                                      70740 (OK=3651   KO=67089 )
-> min response time                                      0 (OK=45     KO=0     )
-> max response time                                  17018 (OK=17018  KO=7     )
-> mean response time                                   688 (OK=13321  KO=0     )
-> std deviation                                       3160 (OK=5019   KO=0     )
-> response time 50th percentile                          0 (OK=15193  KO=0     )
-> response time 75th percentile                          1 (OK=16048  KO=1     )
-> response time 95th percentile                         82 (OK=16625  KO=1     )
-> response time 99th percentile                      16164 (OK=16919  KO=1     )
-> mean requests/sec                                306.234 (OK=15.805 KO=290.429)
+> request count                                      94168 (OK=57216  KO=36952 )
+> min response time                                      0 (OK=2      KO=0     )
+> max response time                                  33477 (OK=33477  KO=160   )
+> mean response time                                 11373 (OK=18686  KO=50    )
+> std deviation                                      13477 (OK=12752  KO=34    )
+> response time 50th percentile                       1344 (OK=22005  KO=47    )
+> response time 75th percentile                      27803 (OK=30801  KO=74    )
+> response time 95th percentile                      32540 (OK=32976  KO=113   )
+> response time 99th percentile                      33196 (OK=33255  KO=132   )
+> mean requests/sec                                 370.74 (OK=225.26 KO=145.48)
 ---- Response Time Distribution ------------------------------------------------
-> t < 800 ms                                           319 (  0%)
-> 800 ms <= t < 1200 ms                                 15 (  0%)
-> t >= 1200 ms                                        3317 (  5%)
-> failed                                             67089 ( 95%)
+> t < 800 ms                                          9195 ( 10%)
+> 800 ms <= t < 1200 ms                                718 (  1%)
+> t >= 1200 ms                                       47303 ( 50%)
+> failed                                             36952 ( 39%)
 ---- Errors --------------------------------------------------------------------
-> j.i.IOException: Premature close                                67089 (100.0%)
+> status.find.in(201,422,400), but actually found 502             24493 (66.28%)
+> status.find.in([200, 209], 304), found 502                      10774 (29.16%)
+> status.find.is(400), but actually found 502                      1685 ( 4.56%)
 ================================================================================
-A contagem de pessoas é: 2325
+A contagem de pessoas é: 25753
 ```
 
 ##### Recusos do docker durante a parte mais pesada do teste
