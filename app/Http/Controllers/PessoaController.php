@@ -59,7 +59,7 @@ class PessoaController extends BaseController
         try {
             $pessoa->save();
         } catch (\Throwable $th) {
-            return response()->make('', 422);
+            return response('', 422);
         }
 
         return response()->make('', 201)->header('Location', "/pessoas/$pessoa->id");
@@ -70,7 +70,7 @@ class PessoaController extends BaseController
         try {
             $pessoa = Pessoa::findOrFail($id);
         } catch (\Throwable $th) {
-            return response()->make('', 404);
+            return response('', 404);
         }
 
         return response()->json($pessoa);
@@ -81,7 +81,7 @@ class PessoaController extends BaseController
         $term = $request->query('t');
 
         if ($term == '') {
-            return response()->json([], 400);
+            return response('', 400);
         }
 
         $pessoas = Pessoa::where('nome', 'like', '%'.$term.'%')->limit(50)->get();
