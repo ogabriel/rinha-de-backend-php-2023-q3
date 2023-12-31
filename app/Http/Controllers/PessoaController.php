@@ -73,7 +73,7 @@ class PessoaController extends BaseController
         }
 
         try {
-            $pessoa = Pessoa::findOrFail($id);
+            $pessoa = Pessoa::select('id', 'apelido', 'nome', 'nascimento', 'stack')->findOrFail($id);
         } catch (\Throwable $th) {
             return response('', 404);
         }
@@ -91,7 +91,10 @@ class PessoaController extends BaseController
 
         $term = strtolower($term);
 
-        $pessoas = Pessoa::where('busca', 'ilike', '%'.$term.'%')->limit(50)->get();
+        $pessoas = Pessoa::where('busca', 'ilike', '%'.$term.'%')
+            ->select('id', 'apelido', 'nome', 'nascimento', 'stack')
+            ->limit(50)
+            ->get();
 
         return response()->json($pessoas);
     }
