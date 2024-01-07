@@ -2,6 +2,12 @@
 
 Implementação em PHP da [rinha de backend 2023 Q3](https://github.com/zanfranceschi/rinha-de-backend-2023-q3).
 
+## Outras implementações
+
+- [Elixir](https://github.com/ogabriel/rinha-de-backend-elixir)
+- [Ruby](https://github.com/ogabriel/rinha-de-backend-ruby)
+- [Golang](https://github.com/ogabriel/rinha-de-backend-golang)
+
 ## Objetivo
 
 Implementar a rinha em PHP usando o Laravel, e sem fazer nenuma adição de cache e batch insert.
