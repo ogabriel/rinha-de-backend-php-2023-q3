@@ -2,7 +2,8 @@ FROM php:fpm-alpine AS release
 
 RUN apk add --update --no-cache make postgresql-client postgresql-dev nginx supervisor
 
-RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && docker-php-ext-install pgsql pdo_pgsql opcache
+RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && \
+    docker-php-ext-install pgsql pdo_pgsql opcache
 
 WORKDIR /app
 
