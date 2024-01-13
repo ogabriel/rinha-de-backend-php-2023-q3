@@ -27,7 +27,7 @@ services:
       resources:
         limits:
           cpus: '0.5'
-          memory: '0.75GB'
+          memory: '1GB'
 
   app2:
     <<: *app1
@@ -50,8 +50,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.1'
-          memory: '0.5GB'
+          cpus: '0.15'
+          memory: '0.4GB'
 
   postgres:
     image: postgres:alpine
@@ -66,5 +66,5 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.3'
-          memory: '0.7GB'
+          cpus: '0.35'
+          memory: '0.6GB'
