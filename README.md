@@ -33,13 +33,30 @@ Implementar a rinha em PHP usando o Laravel, e sem fazer nenuma adição de cach
 7. usar JIT no opcache
     - melhorou mais um pouco
 8. otimizar recursos para a aplicação PHP
+    - deu pra chegar em 33K e 25K no meu laptop
     - PHP usa recursos demais, quanto mais recursos liberados para ele, melhor performance, o bottleneck tava no web server
+9. adicionar swoole
+    - sem mexer muito mais foi pra 33K registros no laptop, mas tinha algo errado, pq o servidor reiniciava toda hora
+    swole é uma extenção que tem uma lógica de coroutine/fiber
+    - a performance é bem superior a usar nginx + fpm
+10. ajustar settings basicas do swoole
+    - deu pra chegar em 37K no meu laptop
+    - como quase todo servidor web, o swoole tem um limite de requisições que logo depois reinicia, precisei desligar isso para parar de reiniciar
+11. fine tunning nos workers
+12. remover o pgbouncer
+    - tava usando recursos preciosos
+13. aumentar o recurso do nginx
+    - foi pra 41K no laptop
+    - nginx estava gargalando todo o processo
+14. diminuir o worker pra 1 e aumentar bastante os task-workers do swoole
+    - 46576 no meu laptop!
+    - 1 conexão por container
 
 ## Conclusões
 
-Não sei se estou comentendo algum erro muito grande em PHP (nunca programei antes), mas a performance é MUITO pior que o Ruby, e nem se compara com Elixir ou Golang.
+Não sei se estou comentendo algum erro muito grande em PHP (nunca programei antes), mas a performance é MUITO pior que o Ruby, e nem se compara com Elixir ou Golang. Além de que por algumas limitações do ORM do Laravel, algumas coisas bem pesadas tiveram de ser feitas para atingir todos os objetivos da rinha.
 
-Além de que por algumas limitações do ORM do Laravel, algumas coisas bem pesadas tiveram de ser feitas para atingir todos os objetivos da rinha.
+Mas depois de passar a usar o swoole e fazer vários ajustes, foi possível chegar ao objetivo da rinha. O único problema é a latência, que não parece ser a melhor, mas deve ser por causa da falta de configuração de database pool.
 
 ## Resultados
 
