@@ -1,9 +1,10 @@
-FROM php:fpm-alpine AS release
+FROM phpswoole/swoole:php8.3-alpine AS release
 
-RUN apk add --update --no-cache make postgresql-client postgresql-dev nginx supervisor
+RUN apk add --update --no-cache make postgresql-client postgresql-dev
 
-RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && \
-    docker-php-ext-install pgsql pdo_pgsql opcache
+RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+    && docker-php-ext-install pgsql pdo_pgsql pcntl \
+    && docker-php-source delete
 
 WORKDIR /app
 
@@ -15,20 +16,6 @@ RUN composer install --optimize-autoloader --apcu-autoloader --classmap-authorit
 
 RUN php artisan optimize:clear
 
-COPY php-fpm.conf /usr/local/etc/php-fpm.conf
-
-COPY opcache.ini /usr/local/etc/php/conf.d/opcache.ini
-
 RUN mkdir -p /var/run/php
-
-FROM release AS release1
-
-COPY nginx-app-1.conf /etc/nginx/nginx.conf
-
-ENTRYPOINT ["/app/docker-entrypoint.sh"]
-
-FROM release AS release2
-
-COPY nginx-app-2.conf /etc/nginx/nginx.conf
 
 ENTRYPOINT ["/app/docker-entrypoint.sh"]

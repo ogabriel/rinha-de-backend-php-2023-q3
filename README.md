@@ -33,13 +33,30 @@ Implementar a rinha em PHP usando o Laravel, e sem fazer nenuma adição de cach
 7. usar JIT no opcache
     - melhorou mais um pouco
 8. otimizar recursos para a aplicação PHP
+    - deu pra chegar em 33K e 25K no meu laptop
     - PHP usa recursos demais, quanto mais recursos liberados para ele, melhor performance, o bottleneck tava no web server
+9. adicionar swoole
+    - sem mexer muito mais foi pra 33K registros no laptop, mas tinha algo errado, pq o servidor reiniciava toda hora
+    swole é uma extenção que tem uma lógica de coroutine/fiber
+    - a performance é bem superior a usar nginx + fpm
+10. ajustar settings basicas do swoole
+    - deu pra chegar em 37K no meu laptop
+    - como quase todo servidor web, o swoole tem um limite de requisições que logo depois reinicia, precisei desligar isso para parar de reiniciar
+11. fine tunning nos workers
+12. remover o pgbouncer
+    - tava usando recursos preciosos
+13. aumentar o recurso do nginx
+    - foi pra 41K no laptop
+    - nginx estava gargalando todo o processo
+14. diminuir o worker pra 1 e aumentar bastante os task-workers do swoole
+    - 46576 no meu laptop!
+    - 1 conexão por container
 
 ## Conclusões
 
-Não sei se estou comentendo algum erro muito grande em PHP (nunca programei antes), mas a performance é MUITO pior que o Ruby, e nem se compara com Elixir ou Golang.
+Não sei se estou comentendo algum erro muito grande em PHP (nunca programei antes), mas a performance é MUITO pior que o Ruby, e nem se compara com Elixir ou Golang. Além de que por algumas limitações do ORM do Laravel, algumas coisas bem pesadas tiveram de ser feitas para atingir todos os objetivos da rinha.
 
-Além de que por algumas limitações do ORM do Laravel, algumas coisas bem pesadas tiveram de ser feitas para atingir todos os objetivos da rinha.
+Mas depois de passar a usar o swoole e fazer vários ajustes, foi possível chegar ao objetivo da rinha. O único problema é a latência, que não parece ser a melhor, mas deve ser por causa da falta de configuração de database pool.
 
 ## Resultados
 
@@ -105,38 +122,35 @@ A contagem de pessoas é: 33707
 
 ![resultado gatling navegador part 1](./images/laptop/two/gatling-browser-1.png)
 ![resultado gatling navegador part 2](./images/laptop/two/gatling-browser-2.png)
+![resultado gatling navegador part 3](./images/laptop/two/gatling-browser-3.png)
 
 ##### Resultado do gatling console
 
 ```
-Simulation RinhaBackendSimulation completed in 253 seconds
+Simulation RinhaBackendSimulation completed in 229 seconds
 Parsing log file(s)...
 Parsing log file(s) done
 Generating reports...
 
 ================================================================================
 ---- Global Information --------------------------------------------------------
-> request count                                      94168 (OK=57216  KO=36952 )
-> min response time                                      0 (OK=2      KO=0     )
-> max response time                                  33477 (OK=33477  KO=160   )
-> mean response time                                 11373 (OK=18686  KO=50    )
-> std deviation                                      13477 (OK=12752  KO=34    )
-> response time 50th percentile                       1344 (OK=22005  KO=47    )
-> response time 75th percentile                      27803 (OK=30801  KO=74    )
-> response time 95th percentile                      32540 (OK=32976  KO=113   )
-> response time 99th percentile                      33196 (OK=33255  KO=132   )
-> mean requests/sec                                 370.74 (OK=225.26 KO=145.48)
+> request count                                     114991 (OK=114991 KO=0     )
+> min response time                                      1 (OK=1      KO=-     )
+> max response time                                  17585 (OK=17585  KO=-     )
+> mean response time                                  4458 (OK=4458   KO=-     )
+> std deviation                                       5560 (OK=5560   KO=-     )
+> response time 50th percentile                       1269 (OK=1267   KO=-     )
+> response time 75th percentile                       8503 (OK=8503   KO=-     )
+> response time 95th percentile                      15657 (OK=15657  KO=-     )
+> response time 99th percentile                      17033 (OK=17033  KO=-     )
+> mean requests/sec                                499.961 (OK=499.961 KO=-     )
 ---- Response Time Distribution ------------------------------------------------
-> t < 800 ms                                          9195 ( 10%)
-> 800 ms <= t < 1200 ms                                718 (  1%)
-> t >= 1200 ms                                       47303 ( 50%)
-> failed                                             36952 ( 39%)
----- Errors --------------------------------------------------------------------
-> status.find.in(201,422,400), but actually found 502             24493 (66.28%)
-> status.find.in([200, 209], 304), found 502                      10774 (29.16%)
-> status.find.is(400), but actually found 502                      1685 ( 4.56%)
+> t < 800 ms                                         53508 ( 47%)
+> 800 ms <= t < 1200 ms                               3459 (  3%)
+> t >= 1200 ms                                       58024 ( 50%)
+> failed                                                 0 (  0%)
 ================================================================================
-A contagem de pessoas é: 25753
+A contagem de pessoas é: 46576
 ```
 
 ##### Recusos do docker durante a parte mais pesada do teste

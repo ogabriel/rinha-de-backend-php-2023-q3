@@ -6,7 +6,8 @@ if [ "$1" = 'release' ]; then
     php artisan optimize
 
     # exec php artisan serve --host=0.0.0.0 --port=$PORT
-    exec supervisord -c /app/supervisord.conf
+    # exec supervisord -c /app/supervisord.conf
+    exec php artisan octane:start --server=swoole --host=0.0.0.0 --port=$PORT --workers=1 --task-workers=30 --max-requests=0
 elif [ "$1" = 'migrate_and_release' ]; then
     make database-check
 
@@ -16,5 +17,6 @@ elif [ "$1" = 'migrate_and_release' ]; then
     php artisan optimize
 
     # exec php artisan serve --host=0.0.0.0 --port=$PORT
-    exec supervisord -c /app/supervisord.conf
+    # exec supervisord -c /app/supervisord.conf
+    exec php artisan octane:start --server=swoole --host=0.0.0.0 --port=$PORT --workers=1 --task-workers=30 --max-requests=0
 fi

@@ -5,15 +5,16 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: release1
+      target: release
     environment: &env_app1
       APP_ENV: production
       APP_DEBUG: false
+      APP_KEY: base64:G0wb3VMEq/wwH8EWq4cL1s39mPQkuap7cUc/tXt8ne4=
       OCTANE_SERVER: swoole
       LOG_CHANNEL: null
       DB_CONNECTION: pgsql
       DB_HOST: 127.0.0.1
-      DB_PORT: 6432
+      DB_PORT: 5432
       DB_DATABASE: rinha
       DB_USERNAME: postgres
       DB_PASSWORD: postgres
@@ -25,15 +26,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.55'
-          memory: '0.75GB'
+          cpus: '0.5'
+          memory: '1GB'
 
   app2:
     <<: *app1
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: release2
     depends_on:
     - app1
     environment:
@@ -53,8 +50,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.1'
-          memory: '0.5GB'
+          cpus: '0.15'
+          memory: '0.4GB'
 
   postgres:
     image: postgres:alpine
@@ -69,18 +66,5 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.2'
-          memory: '0.7GB'
-
-  pgbouncer:
-    build:
-      context: .
-      dockerfile: Dockerfile.pgbouncer
-    network_mode: host
-    depends_on:
-    - postgres
-    deploy:
-      resources:
-        limits:
-          cpus: '0.1'
-          memory: '0.3GB'
+          cpus: '0.35'
+          memory: '0.6GB'
