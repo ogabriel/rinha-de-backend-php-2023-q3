@@ -5,10 +5,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: release1
+      target: release
     environment: &env_app1
       APP_ENV: production
       APP_DEBUG: false
+      APP_KEY: base64:G0wb3VMEq/wwH8EWq4cL1s39mPQkuap7cUc/tXt8ne4=
       OCTANE_SERVER: swoole
       LOG_CHANNEL: null
       DB_CONNECTION: pgsql
@@ -25,15 +26,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.55'
+          cpus: '0.5'
           memory: '0.75GB'
 
   app2:
     <<: *app1
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: release2
     depends_on:
     - app1
     environment:
@@ -69,7 +66,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.2'
+          cpus: '0.3'
           memory: '0.7GB'
 
   pgbouncer:
